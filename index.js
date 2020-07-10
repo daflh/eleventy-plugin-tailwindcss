@@ -1,4 +1,5 @@
 const path = require("path");
+const fs = require("fs");
 const vfs = require("vinyl-fs");
 const shimmer = require("shimmer");
 const chokidar = require("chokidar");
@@ -33,6 +34,9 @@ module.exports = {
 
             function compile (cb = () => {}) {
                 console.log(`${logBefore} Start compiling`);
+                if (!fs.existsSync(options.configFile)) {
+                    options.configFile = undefined;
+                }
                 vfs.src(options.src)
                     .pipe(postcss([
                         tailwindcss(options.configFile),
