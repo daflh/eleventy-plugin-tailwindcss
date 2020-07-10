@@ -1,0 +1,38 @@
+{
+  "name": "eleventy-plugin-tailwindcss",
+  "version": "0.1.0",
+  "description": "An Eleventy plugin to add Tailwind CSS support for your website",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dafiulh/eleventy-plugin-tailwindcss.git"
+  },
+  "keywords": [
+    "eleventy",
+    "eleventy-plugin",
+    "tailwindcss"
+  ],
+  "bugs": {
+    "url": "https://github.com/dafiulh/eleventy-plugin-tailwindcss/issues"
+  },
+  "author": {
+    "name": "Dafiul Haq",
+    "email": "dafiulhaq97@gmail.com"
+  },
+  "homepage": "https://github.com/dafiulh/eleventy-plugin-tailwindcss#readme",
+  "license": "MIT",
+  "peerDependencies": {
+    "@11ty/eleventy": ">=0.5.4"
+  },
+  "dependencies": {
+    "autoprefixer": "^9.8.4",
+    "chalk": "^4.1.0",
+    "chokidar": "^3.4.0",
+    "gulp-clean-css": "^4.3.0",
+    "gulp-if": "^3.0.0",
+    "gulp-postcss": "^8.0.0",
+    "shimmer": "^1.2.1",
+    "tailwindcss": "^1.4.6",
+    "vinyl-fs": "^3.0.3"
+  }
+}
