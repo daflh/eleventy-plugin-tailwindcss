@@ -21,7 +21,6 @@ module.exports = {
             const outputDir = new Eleventy().outputDir;
             const defaultOptions = {
                 src: path.join(inputDir, "**/*.css"),
-                dest: "",
                 configFile: "./tailwind.config.js",
                 autoprefixer: true,
                 autoprefixerOptions: {},
@@ -43,7 +42,7 @@ module.exports = {
                         ...options.autoprefixer ? [autoprefixer(options.autoprefixerOptions)] : []
                     ]))
                     .pipe(when(options.minify, cleanCSS(options.minifyOptions)))
-                    .pipe(vfs.dest(path.join(outputDir, options.dest)))
+                    .pipe(vfs.dest(outputDir))
                     .on("end", function () {
                         console.log(`${logBefore} Compiled successfully`);
                         cb();
