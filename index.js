@@ -32,17 +32,12 @@ module.exports = {
             let initialized = false;
 
             function compile (cb = () => {}) {
-                let postcssPlugins = [
-                    tailwindcss(options.configFile)
-                ];
-                if (options.autoprefixer) {
-                    postcssPlugins.push(
-                        autoprefixer(options.autoprefixerOptions)
-                    );
-                }
                 console.log(`${logBefore} Start compiling`);
                 vfs.src(options.src)
-                    .pipe(postcss(postcssPlugins))
+                    .pipe(postcss([
+                        tailwindcss(options.configFile),
+                        ...options.autoprefixer ? [autoprefixer(options.autoprefixerOptions)] : []
+                    ]))
                     .pipe(when(options.minify, cleanCSS(options.minifyOptions)))
                     .pipe(vfs.dest(path.join(outputDir, options.dest)))
                     .on("end", function () {
