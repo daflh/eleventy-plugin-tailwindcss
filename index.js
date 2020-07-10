@@ -49,8 +49,8 @@ module.exports = {
             shimmer.wrap(Eleventy.prototype, "write", function (original) {
                 return function () {
                     if (!initialized && !this.isDryRun) {
-                        compile();
                         initialized = true;
+                        compile();
                     }
                     return original.apply(this, arguments);
                 }
@@ -58,11 +58,11 @@ module.exports = {
 
             shimmer.wrap(Eleventy.prototype, "watch", function (original) {
                 return function () {
-                    if (!initialized) {
+                    if (!initialized && !this.isDryRun) {
+                        initialized = true;
                         compile(() => {
                             console.log(`${logBefore} Watching...`);
                         });
-                        initialized = true;
                         const elev = this;
                         let watcher = chokidar.watch(options.src);
                         watcher.on("change", () => {
