@@ -1,6 +1,6 @@
 @variants hover, focus {
     .example {
-        @apply text-yellow-300;
+        @apply text-red-700;
         background: linear-gradient(to grey, bottom, black);
     }
 }
