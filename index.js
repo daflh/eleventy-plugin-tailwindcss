@@ -29,8 +29,6 @@ module.exports = {
             };
             options = { ...defaultOptions, ...options };
             
-            let initialized = false;
-
             function compile () {
                 return new Promise((resolve) => {
                     console.log(`${pluginName} Start compiling`);
@@ -51,32 +49,35 @@ module.exports = {
                 });
             }
 
-            shimmer.wrap(Eleventy.prototype, "write", function (original) {
+            let isWatch = false;
+
+            shimmer.wrap(Eleventy.prototype, "watch", function (original) {
                 return function () {
-                    if (!initialized && !this.isDryRun) {
-                        initialized = true;
-                        compile();
-                    }
+                    isWatch = true;
                     return original.apply(this, arguments);
                 }
             });
 
-            shimmer.wrap(Eleventy.prototype, "watch", function (original) {
+            shimmer.wrap(Eleventy.prototype, "write", function (original) {
                 return function () {
-                    if (!initialized && !this.isDryRun) {
-                        initialized = true;
-                        compile().then(() => {
-                            console.log(`${pluginName} Watching...`);
-                        });
-                        const elev = this;
-                        let watcher = chokidar.watch(options.src);
-                        watcher.on("change", () => {
+                    if (!this.isDryRun) {
+                        if (!isWatch) {
+                            compile();
+                        } else {
                             compile().then(() => {
+                                const elev = this;
+                                let watcher = chokidar.watch(options.src);
+                                watcher.on("change", () => {
+                                    compile().then(() => {
+                                        console.log(`${pluginName} Watching...`);
+                                        elev.eleventyServe.reload();
+                                    });
+                                });
                                 console.log(`${pluginName} Watching...`);
-                                elev.eleventyServe.reload();
                             });
-                        });
+                        }
                     }
+                    shimmer.massUnwrap(this, ["watch", "write"]);
                     return original.apply(this, arguments);
                 }
             });
