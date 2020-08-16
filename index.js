@@ -4,17 +4,17 @@ const vfs = require("vinyl-fs");
 const shimmer = require("shimmer");
 const chokidar = require("chokidar");
 const chalk  = require("chalk");
-const when = require("gulp-if");
+const onlyIf = require("gulp-if");
 const postcss = require("gulp-postcss");
 const cleanCSS = require("gulp-clean-css");
 const autoprefixer = require("autoprefixer");
 const tailwindcss = require('tailwindcss');
 
-const logBefore = `[${chalk.blue("EleventyPluginTailwindCSS")}]`;
+const pluginName = `[${chalk.blue("EleventyPluginTailwindCSS")}]`;
 
 module.exports = {
     initArguments: {},
-    configFunction: (eleventyConfig, options = {}) => {
+    configFunction: (__, options = {}) => {
         setImmediate(function () {
             const Eleventy = require("@11ty/eleventy");
             const inputDir = new Eleventy().inputDir;
@@ -33,7 +33,7 @@ module.exports = {
 
             function compile () {
                 return new Promise((resolve) => {
-                    console.log(`${logBefore} Start compiling`);
+                    console.log(`${pluginName} Start compiling`);
                     if (!fs.existsSync(options.configFile)) {
                         options.configFile = undefined;
                     }
@@ -42,10 +42,10 @@ module.exports = {
                             tailwindcss(options.configFile),
                             ...options.autoprefixer ? [autoprefixer(options.autoprefixerOptions)] : []
                         ]))
-                        .pipe(when(options.minify, cleanCSS(options.minifyOptions)))
+                        .pipe(onlyIf(options.minify, cleanCSS(options.minifyOptions)))
                         .pipe(vfs.dest(outputDir))
                         .on("end", function () {
-                            console.log(`${logBefore} Compiled successfully`);
+                            console.log(`${pluginName} Compiled successfully`);
                             resolve();
                         });
                 });
@@ -66,13 +66,13 @@ module.exports = {
                     if (!initialized && !this.isDryRun) {
                         initialized = true;
                         compile().then(() => {
-                            console.log(`${logBefore} Watching...`);
+                            console.log(`${pluginName} Watching...`);
                         });
                         const elev = this;
                         let watcher = chokidar.watch(options.src);
                         watcher.on("change", () => {
                             compile().then(() => {
-                                console.log(`${logBefore} Watching...`);
+                                console.log(`${pluginName} Watching...`);
                                 elev.eleventyServe.reload();
                             });
                         });
