@@ -31,22 +31,24 @@ module.exports = {
             
             let initialized = false;
 
-            function compile (cb = () => {}) {
-                console.log(`${logBefore} Start compiling`);
-                if (!fs.existsSync(options.configFile)) {
-                    options.configFile = undefined;
-                }
-                vfs.src(options.src)
-                    .pipe(postcss([
-                        tailwindcss(options.configFile),
-                        ...options.autoprefixer ? [autoprefixer(options.autoprefixerOptions)] : []
-                    ]))
-                    .pipe(when(options.minify, cleanCSS(options.minifyOptions)))
-                    .pipe(vfs.dest(outputDir))
-                    .on("end", function () {
-                        console.log(`${logBefore} Compiled successfully`);
-                        cb();
-                    });
+            function compile () {
+                return new Promise((resolve) => {
+                    console.log(`${logBefore} Start compiling`);
+                    if (!fs.existsSync(options.configFile)) {
+                        options.configFile = undefined;
+                    }
+                    vfs.src(options.src)
+                        .pipe(postcss([
+                            tailwindcss(options.configFile),
+                            ...options.autoprefixer ? [autoprefixer(options.autoprefixerOptions)] : []
+                        ]))
+                        .pipe(when(options.minify, cleanCSS(options.minifyOptions)))
+                        .pipe(vfs.dest(outputDir))
+                        .on("end", function () {
+                            console.log(`${logBefore} Compiled successfully`);
+                            resolve();
+                        });
+                });
             }
 
             shimmer.wrap(Eleventy.prototype, "write", function (original) {
@@ -63,13 +65,13 @@ module.exports = {
                 return function () {
                     if (!initialized && !this.isDryRun) {
                         initialized = true;
-                        compile(() => {
+                        compile().then(() => {
                             console.log(`${logBefore} Watching...`);
                         });
                         const elev = this;
                         let watcher = chokidar.watch(options.src);
                         watcher.on("change", () => {
-                            compile(function () {
+                            compile().then(() => {
                                 console.log(`${logBefore} Watching...`);
                                 elev.eleventyServe.reload();
                             });
