@@ -12,6 +12,7 @@ module.exports = function (options, isWatch) {
         src: path.join(inputDir, "**/*.css"),
         dest: ".",
         configFile: "./tailwind.config.js",
+        excludeNodeModules: true,
         autoprefixer: true,
         autoprefixerOptions: {},
         minify: true,
@@ -24,8 +25,12 @@ module.exports = function (options, isWatch) {
         options.configFile = undefined;
     }
 
+    let excludeGlob = [options.dest, "**/!(*.css)"];
+    if (options.excludeNodeModules) {
+        excludeGlob.push("node_modules/**/*");
+    }
     const fileNames = fg.sync(options.src, {
-        ignore: [options.dest, "**/!(*.css)", "node_modules/**/*"]
+        ignore: excludeGlob
     });
 
     writer(fileNames, options).then(() => {
