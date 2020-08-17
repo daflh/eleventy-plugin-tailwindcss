@@ -1,8 +1,8 @@
-@variants hover, focus {
-    .example {
-        @apply text-red-700 text-center;
-        transition: all .5s;
-    }
+.example {
+    @apply text-red-700;
+    text-align: center;
+    transition: all .5s;
+    user-select: none;
 }
 
 .tiny {
