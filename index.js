@@ -1,6 +1,6 @@
 const Eleventy = require("@11ty/eleventy");
 const shimmer = require("shimmer");
-const writeCSS = require("./src/write");
+const processor = require("./src/processor");
 
 module.exports = {
     initArguments: {},
@@ -18,7 +18,7 @@ module.exports = {
             shimmer.wrap(Eleventy.prototype, "write", function (original) {
                 return function () {
                     if (!this.isDryRun) {
-                        writeCSS.call(this, options, isWatch);
+                        processor.call(this, options, isWatch);
                     }
                     shimmer.massUnwrap(this, ["watch", "write"]);
                     return original.apply(this, arguments);

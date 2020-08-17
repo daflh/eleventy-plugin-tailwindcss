@@ -1,7 +1,8 @@
 const fs = require("fs");
 const path = require('path');
 const chokidar = require("chokidar");
-const compileCSS = require("./compile");
+const fg = require("fast-glob");
+const writer = require("./writer");
 
 module.exports = function (options, isWatch) {
     const elev = this;
@@ -23,13 +24,16 @@ module.exports = function (options, isWatch) {
         options.configFile = undefined;
     }
 
-    compileCSS(options).then(() => {
+    const fileNames = fg.sync(options.src, {
+        ignore: [options.dest, "node_modules/**/*"]
+    });
+
+    writer(fileNames, options).then(() => {
         if (isWatch) {
-            const watcher = chokidar.watch(options.src, {
-                ignored: options.dest
-            });
-            watcher.on("change", () => {
-                compileCSS(options).then(() => {
+            const watcher = chokidar.watch(fileNames);
+            watcher.on("change", (path) => {
+                console.log("[TailwindCSS Plugin] File changed: " + path);
+                writer(fileNames, options).then(() => {
                     elev.eleventyServe.reload();
                     console.log("Watching…");
                 });
