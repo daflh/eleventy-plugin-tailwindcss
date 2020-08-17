@@ -1,6 +1,10 @@
 @variants hover, focus {
     .example {
-        @apply text-red-700;
-        background: linear-gradient(to grey, bottom, black);
+        @apply text-red-700 text-center;
+        transition: all .5s;
     }
+}
+
+.tiny {
+    @apply text-tiny;
 }

@@ -3,6 +3,7 @@ const path = require('path');
 const chokidar = require("chokidar");
 const fg = require("fast-glob");
 const writer = require("./writer");
+const log = require("./log");
 
 module.exports = function (options, isWatch) {
     const elev = this;
@@ -11,7 +12,7 @@ module.exports = function (options, isWatch) {
     const defaultOptions = {
         src: path.join(inputDir, "**/*.css"),
         dest: ".",
-        configFile: "./tailwind.config.js",
+        configFile: "tailwind.config.js",
         excludeNodeModules: true,
         autoprefixer: true,
         autoprefixerOptions: {},
@@ -23,6 +24,8 @@ module.exports = function (options, isWatch) {
     options.dest = path.join(outputDir, options.dest);
     if (!fs.existsSync(options.configFile)) {
         options.configFile = undefined;
+    } else {
+        log("Using Tailwind config file from " + options.configFile);
     }
 
     let excludeGlob = [options.dest, "**/!(*.css)"];
@@ -37,7 +40,7 @@ module.exports = function (options, isWatch) {
         if (isWatch) {
             const watcher = chokidar.watch(fileNames);
             watcher.on("change", (path) => {
-                console.log("[TailwindCSS Plugin] File changed: " + path);
+                log("File changed: " + path);
                 writer(fileNames, options).then(() => {
                     elev.eleventyServe.reload();
                     console.log("Watching…");
