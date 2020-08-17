@@ -25,7 +25,7 @@ module.exports = function (options, isWatch) {
     }
 
     const fileNames = fg.sync(options.src, {
-        ignore: [options.dest, "node_modules/**/*"]
+        ignore: [options.dest, "**/!(*.css)", "node_modules/**/*"]
     });
 
     writer(fileNames, options).then(() => {
