@@ -9,8 +9,8 @@ module.exports = function (options, isWatch) {
     const outputDir = elev.outputDir;
     const defaultOptions = {
         src: path.join(inputDir, "**/*.css"),
-        dest: outputDir,
-        configFile: "tailwind.config.js",
+        dest: ".",
+        configFile: "./tailwind.config.js",
         autoprefixer: true,
         autoprefixerOptions: {},
         minify: true,
@@ -18,13 +18,16 @@ module.exports = function (options, isWatch) {
     }
 
     options = { ...defaultOptions, ...options };
+    options.dest = path.join(outputDir, options.dest);
     if (!fs.existsSync(options.configFile)) {
         options.configFile = undefined;
     }
 
     compileCSS(options).then(() => {
         if (isWatch) {
-            const watcher = chokidar.watch(options.src);
+            const watcher = chokidar.watch(options.src, {
+                ignored: options.dest
+            });
             watcher.on("change", () => {
                 compileCSS(options).then(() => {
                     elev.eleventyServe.reload();
