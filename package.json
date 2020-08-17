@@ -22,7 +22,7 @@
   "homepage": "https://github.com/dafiulh/eleventy-plugin-tailwindcss#readme",
   "license": "MIT",
   "scripts": {
-    "sample": "npx @11ty/eleventy --input=sample --output=sample/_site --config=sample/.eleventy.js"
+    "sample": "rimraf sample/_site && npx @11ty/eleventy --input=sample --output=sample/_site --config=sample/.eleventy.js"
   },
   "peerDependencies": {
     "@11ty/eleventy": ">=0.5.4"
@@ -39,6 +39,7 @@
     "vinyl-fs": "^3.0.3"
   },
   "devDependencies": {
-    "@11ty/eleventy": "^0.11.0"
+    "@11ty/eleventy": "^0.11.0",
+    "rimraf": "^3.0.2"
   }
 }
