@@ -11,16 +11,17 @@ module.exports = function (options, isWatch) {
     const outputDir = elev.outputDir;
     const defaultOptions = {
         src: path.join(inputDir, "**/*.css"),
-        dest: ".",
-        configFile: "tailwind.config.js",
         excludeNodeModules: true,
+        dest: ".",
+        keepFolderStructure: false,
+        configFile: "tailwind.config.js",
         autoprefixer: true,
         autoprefixerOptions: {},
         minify: true,
         minifyOptions: {}
     }
 
-    options = { ...defaultOptions, ...options };
+    options = { ...defaultOptions, ...options, inputDir, outputDir };
     options.dest = path.join(outputDir, options.dest);
     if (!fs.existsSync(options.configFile)) {
         options.configFile = undefined;

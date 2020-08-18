@@ -20,7 +20,14 @@ module.exports = async function (fileNames, options) {
     
         for (let fileName of fileNames) {
             let baseName = path.basename(fileName);
-            let dest = path.join(options.dest, baseName);
+            let subDir = "";
+            if (options.keepFolderStructure) {
+                let pathToFile = path.relative(options.inputDir, path.dirname(fileName));
+                if (pathToFile !== "") {
+                    subDir = pathToFile.replace(/^\.\.\/?/, "");
+                }
+            }
+            let dest = path.join(options.dest, subDir, baseName);
             let file = await readFile(fileName);
     
             let postcssResult = await postcss(postcssPlugins).process(file, {

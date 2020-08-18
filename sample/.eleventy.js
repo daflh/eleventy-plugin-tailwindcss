@@ -6,9 +6,10 @@ module.exports = (eleventyConfig) => {
 
     eleventyConfig.addPlugin(pluginTailwind, {
         src: ["**/*"],
-        dest: ".",
-        configFile: "sample/tailwind.config.js",
         excludeNodeModules: true,
+        dest: ".",
+        keepFolderStructure: false,
+        configFile: "sample/tailwind.config.js",
         autoprefixer: true,
         autoprefixerOptions: {},
         minify: true,
