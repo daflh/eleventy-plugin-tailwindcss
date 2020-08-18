@@ -60,7 +60,7 @@ Take a look at second example above, if you delete `dest` option, so that it ret
 ### keepFolderStructure
 > New in v0.2.0
 * Type: `boolean`
-* Default: `false`
+* Default: `true`
 
 Indicates whether the input file folder structure will be preserved in the output.
 

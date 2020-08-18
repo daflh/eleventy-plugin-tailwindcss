@@ -13,7 +13,7 @@ module.exports = function (options, isWatch) {
         src: path.join(inputDir, "**/*.css"),
         excludeNodeModules: true,
         dest: ".",
-        keepFolderStructure: false,
+        keepFolderStructure: true,
         configFile: "tailwind.config.js",
         autoprefixer: true,
         autoprefixerOptions: {},
