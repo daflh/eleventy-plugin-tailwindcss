@@ -1,4 +1,4 @@
-# eleventy-plugin-tailwindcss
+# Eleventy Plugin Tailwind CSS
 An [Eleventy](https://www.11ty.dev/) plugin to add [Tailwind CSS](https://tailwindcss.com/) support for your website.
 
 ## Installation
@@ -18,23 +18,83 @@ module.exports = function(eleventyConfig) {
 };
 ```
 
-You can also pass in options, for example:
+You can also pass in options. For example, this will process the CSS file from `src/css/main.css` to `_site/assets/main.css`:
 ```javascript
+// Input directory: src
+// Output directory: _site
 eleventyConfig.addPlugin(pluginTailwindCSS, {
-    src: "./src/main.css",
+    src: "src/css/main.css",
+    dest: "assets",
+    keepFolderStructure: false,
     minify: false
-    // See below for other options
+    // See below for other available options
 });
 ```
 
 ## Options
-Available options are:
-- `src` (default: *your input dir* + `"**/*.css"`) - Glob (or array of globs) to specify the location of the CSS file you want to process with Tailwind CSS, **relative to the root** of your project.
-- `configFile` (default: `"./tailwind.config.js"`) - Path to tailwind configuration file (if exists), relative to the root of your project.
-- `autoprefixer` (default: `true`) - Controls whether an output file should be added browser specific prefixes (like `-webkit` or `-moz`) if needed using [Autoprefixer](https://www.npmjs.com/package/autoprefixer).
-- `minify` (default: `true`) - Controls whether an output file should be minified using [cleanCSS](https://www.npmjs.com/package/clean-css).
-- `autoprefixerOptions` (default: `{}`) - Options to pass to Autoprefixer. See available options [here](https://github.com/postcss/autoprefixer#options).
-- `minifyOptions` (default: `{}`) - Options to pass to cleanCSS. See available options [here](https://github.com/jakubpawlowicz/clean-css/tree/v4.2.1#constructor-options).
+
+### src
+* Type: `string` | `string[]`
+* Default:  *your input dir* + `"**/*.css"`
+
+Paths (or glob patterns) to CSS files you want to process with Tailwind CSS, relative to the root of your project. To avoid any errors, we automatically exclude all files except those ending in `.css`.
+
+> :book: We use [fast-glob](https://www.npmjs.com/package/fast-glob) as our low-level library for glob matching.
+
+### excludeNodeModules
+> New in v0.2.0
+* Type: `boolean`
+* Default: `true`
+
+Should the `node_modules` folder be excluded from the matching glob.
+
+### dest
+> New in v0.2.0
+* Type: `string`
+* Default: `.`
+
+Where processed CSS files should be placed in the output folder.
+
+Take a look at second example above, if you delete `dest` option, so that it returns to the default value (`.` which means right below the output folder), then the file will be placed at `_site/main.css` (Assuming your Eleventy output folder is `_site`).
+
+### keepFolderStructure
+> New in v0.2.0
+* Type: `boolean`
+* Default: `false`
+
+Indicates whether the input file folder structure will be preserved in the output.
+
+Back to the second example again, if you set `keepFolderStructure` option to `true`, then the file will be placed at `_site/assets/css/main.css` (Assuming your Eleventy output folder is `_site`).
+
+### configFile
+* Type: `string`
+* Default: `tailwind.config.js`
+
+Path to tailwind configuration file (if exists), relative to the root of your project.
+
+### autoprefixer
+* Type: `boolean`
+* Default: `true`
+
+Indicates whether an output file should be added browser specific prefixes (like `-webkit` or `-moz`) if needed using [Autoprefixer](https://www.npmjs.com/package/autoprefixer).
+
+### autoprefixerOptions
+* Type: `object`
+* Default: `{}`
+
+Options to pass to Autoprefixer. See available options [here](https://github.com/postcss/autoprefixer#options).
+
+### minify
+* Type: `boolean`
+* Default: `true`
+
+Indicates whether an output file should be minified using [cleanCSS](https://www.npmjs.com/package/clean-css).
+
+### minifyOptions
+* Type: `object`
+* Default: `{}`
+
+Options to pass to cleanCSS. See available options [here](https://github.com/jakubpawlowicz/clean-css/tree/v4.2.1#constructor-options).
 
 ## License
 MIT © Dafiul Haq
