@@ -5,7 +5,7 @@ const fg = require("fast-glob");
 const writer = require("./writer");
 const log = require("./log");
 
-module.exports = function (options) {
+module.exports = function (options, isWatch) {
     const elev = this;
     const inputDir = elev.inputDir;
     const outputDir = elev.outputDir;
@@ -52,17 +52,12 @@ module.exports = function (options) {
     });
 
     writer(fileNames, options).then(() => {
-        const argv = process.argv.slice(2);
-        const isWatch = argv.includes("--watch");
-        const isServe = argv.includes("--serve");
-        if (isWatch || isServe) {
+        if (isWatch) {
             const watcher = chokidar.watch(watchList);
             watcher.on("change", (path) => {
                 log("File changed: " + path);
                 writer(fileNames, options).then(() => {
-                    if (isServe) {
-                        elev.eleventyServe.reload();
-                    }
+                    elev.eleventyServe.reload();
                     console.log("Watching…");
                 });
             });

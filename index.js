@@ -13,13 +13,19 @@ function monkeypatch(cls, fn) {
 
 module.exports = (__, options = {}) => {
     setImmediate(function () {
-        let firstWrite = true;
+        let firstRun = true;
+        let isWatch = false;
+
+        monkeypatch(Eleventy, function watch (original) {
+            isWatch = true;
+            return original.apply(this, arguments);
+        });
 
         monkeypatch(Eleventy, function write (original) {
-            if (firstWrite && !this.isDryRun) {
-                processor.call(this, options);
+            if (firstRun && !this.isDryRun) {
+                processor.call(this, options, isWatch);
             }
-            firstWrite = false;
+            firstRun = false;
             return original.apply(this, arguments);
         });
 
