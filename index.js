@@ -1,17 +1,27 @@
 const Eleventy = require("@11ty/eleventy");
-const shimmer = require("shimmer");
 const processor = require("./src/processor");
+
+function monkeypatch(cls, fn) {
+    const orig = cls.prototype[fn.name].__original || cls.prototype[fn.name];
+    function wrapped() {
+        return fn.bind(this, orig).apply(this, arguments);
+    }
+    wrapped.__original = orig;
+  
+    cls.prototype[fn.name] = wrapped;
+}
 
 module.exports = (__, options = {}) => {
     setImmediate(function () {
-        shimmer.wrap(Eleventy.prototype, "write", function (original) {
-            return function () {
-                if (!this.isDryRun) {
-                    processor.call(this, options);
-                }
-                shimmer.unwrap(this, "write");
-                return original.apply(this, arguments);
+        let firstWrite = true;
+
+        monkeypatch(Eleventy, function write (original) {
+            if (firstWrite && !this.isDryRun) {
+                processor.call(this, options);
             }
+            firstWrite = false;
+            return original.apply(this, arguments);
         });
+
     });
 }

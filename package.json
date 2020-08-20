@@ -35,7 +35,6 @@
     "fast-glob": "^3.2.4",
     "mkdirp": "^1.0.4",
     "postcss": "^7.0.32",
-    "shimmer": "^1.2.1",
     "tailwindcss": "^1.4.6"
   },
   "devDependencies": {
