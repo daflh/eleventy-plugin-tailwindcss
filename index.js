@@ -1,4 +1,3 @@
-const Eleventy = require("@11ty/eleventy");
 const processor = require("./src/processor");
 
 function monkeypatch(cls, fn) {
@@ -13,6 +12,7 @@ function monkeypatch(cls, fn) {
 
 module.exports = (__, options = {}) => {
     setImmediate(function () {
+        const Eleventy = require("@11ty/eleventy");
         let firstRun = true;
         let isWatch = false;
 
