@@ -18,34 +18,20 @@ module.exports = async function (fileNames, options) {
             ...options.autoprefixer ? [autoprefixer(options.autoprefixerOptions)] : []
         ];
     
-        for (let fileName of fileNames) {
-            let baseName = path.basename(fileName);
-            let subDir = "";
-            if (options.keepFolderStructure) {
-                let pathToFile = path.relative(options.inputDir, path.dirname(fileName));
-                if (pathToFile !== "") {
-                    subDir = pathToFile.replace(/^\.\.\/?/, "");
-                }
-            }
-            let dest = path.join(options.dest, subDir, baseName);
-            let file = await readFile(fileName);
-    
-            let postcssResult = await postcss(postcssPlugins).process(file, {
-                from: fileName,
+        for (let [src, dest] of fileNames) {
+            let rawFile = await readFile(src);
+            let { css: processedFile } = await postcss(postcssPlugins).process(rawFile, {
+                from: src,
                 to: dest
             });
-    
-            let finalResult;
             if (options.minify) {
-                finalResult = new CleanCSS(options.minifyOptions).minify(postcssResult.css).styles;
-            } else {
-                finalResult = postcssResult.css;
+                processedFile = new CleanCSS(options.minifyOptions).minify(processedFile).styles;
             }
     
             mkdirp.sync(path.dirname(dest));
-            await writeFile(dest, finalResult);
+            await writeFile(dest, processedFile);
 
-            log(`Wrote ${dest} from ${fileName}`);
+            log(`Wrote ${dest} from ${src}`);
         }
 
     } catch (error) {

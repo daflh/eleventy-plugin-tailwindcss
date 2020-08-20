@@ -33,8 +33,22 @@ module.exports = function (options) {
     if (options.excludeNodeModules) {
         excludeGlob.push("node_modules/**/*");
     }
-    const fileNames = fg.sync(options.src, {
+
+    const watchList = fg.sync(options.src, {
         ignore: excludeGlob
+    });
+    
+    const fileNames = watchList.map((src) => {
+        let baseName = path.basename(src);
+        let subDir = "";
+        if (options.keepFolderStructure) {
+            let pathToFile = path.relative(options.inputDir, path.dirname(src));
+            if (pathToFile !== "") {
+                subDir = pathToFile.replace(/^\.\.\/?/, "");
+            }
+        }
+        let dest = path.join(options.dest, subDir, baseName);
+        return [src, dest];
     });
 
     writer(fileNames, options).then(() => {
@@ -42,7 +56,7 @@ module.exports = function (options) {
         const isWatch = argv.includes("--watch");
         const isServe = argv.includes("--serve");
         if (isWatch || isServe) {
-            const watcher = chokidar.watch(fileNames);
+            const watcher = chokidar.watch(watchList);
             watcher.on("change", (path) => {
                 log("File changed: " + path);
                 writer(fileNames, options).then(() => {
