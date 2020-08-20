@@ -6,21 +6,13 @@ module.exports = {
     initArguments: {},
     configFunction: (__, options = {}) => {
         setImmediate(function () {
-            let isWatch = false;
-
-            shimmer.wrap(Eleventy.prototype, "watch", function (original) {
-                return function () {
-                    isWatch = true;
-                    return original.apply(this, arguments);
-                }
-            });
 
             shimmer.wrap(Eleventy.prototype, "write", function (original) {
                 return function () {
                     if (!this.isDryRun) {
-                        processor.call(this, options, isWatch);
+                        processor.call(this, options);
                     }
-                    shimmer.massUnwrap(this, ["watch", "write"]);
+                    shimmer.unwrap(this, "write");
                     return original.apply(this, arguments);
                 }
             });
