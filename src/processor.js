@@ -26,7 +26,7 @@ module.exports = function (options, isWatch) {
     if (!fs.existsSync(options.configFile)) {
         options.configFile = undefined;
     } else {
-        log("Using Tailwind config file from " + options.configFile);
+        log("Using " + options.configFile + " as configuration file");
     }
 
     let excludeGlob = [options.dest, "**/!(*.css)"];
