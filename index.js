@@ -10,7 +10,7 @@ function monkeypatch(cls, fn) {
     cls.prototype[fn.name] = wrapped;
 }
 
-module.exports = (__, options = {}) => {
+module.exports = (_, options = {}) => {
     setImmediate(function () {
         const Eleventy = require("@11ty/eleventy");
         let firstRun = true;
