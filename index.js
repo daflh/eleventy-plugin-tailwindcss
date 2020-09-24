@@ -1,7 +1,7 @@
 const processor = require("./src/processor");
 const { monkeypatch } = require("./src/utils");
 
-module.exports = (__, options = {}) => {
+module.exports = (_, options = {}) => {
     setImmediate(function () {
         const Eleventy = require("@11ty/eleventy");
         let firstRun = true;
