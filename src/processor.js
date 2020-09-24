@@ -5,7 +5,7 @@ const fg = require("fast-glob");
 const writer = require("./writer");
 const { log } = require("./utils");
 
-module.exports = function (options, isWatch) {
+module.exports = async function (options, isWatch) {
     const elev = this;
     const inputDir = elev.inputDir;
     const outputDir = elev.outputDir;
@@ -35,7 +35,7 @@ module.exports = function (options, isWatch) {
         excludeGlob.push("node_modules/**/*");
     }
 
-    let watchList = fg.sync(options.src, {
+    let watchList = await fg(options.src, {
         ignore: excludeGlob
     });
     
@@ -52,25 +52,33 @@ module.exports = function (options, isWatch) {
         return [src, dest];
     });
 
-    writer(fileNames, options).then(async () => {
-        if (isWatch) {
-            let ignores = [];
-            if (options.watchEleventyFile) {
-                await this.initWatch();
-                watchList = watchList.concat(await this.getWatchedFiles());
-                ignores = ignores.concat(this.eleventyFiles.getGlobWatcherIgnores());
-            }
-            const watcher = chokidar.watch(watchList, {
-                ignored: ignores
-            });
-            watcher.on("change", (path) => {
-                log("File changed: " + path);
-                writer(fileNames, options).then(() => {
-                    elev.eleventyServe.reload();
-                    log("Watching…");
-                });
-            });
+    await writer(fileNames, options);
+    
+    if (isWatch) {
+        let ignores = [];
+        if (options.watchEleventyFile) {
+            await this.initWatch();
+            watchList = watchList.concat(await this.getWatchedFiles());
+            ignores = ignores.concat(this.eleventyFiles.getGlobWatcherIgnores());
         }
-    });
+
+        const watcher = chokidar.watch(watchList, {
+            ignored: ignores
+        });
+
+        watcher.on("change", (path) => {
+            log("File changed: " + path);
+
+            writer(fileNames, options).then(() => {
+                elev.eleventyServe.reload();
+                log("Watching…");
+                
+            });
+
+        });
+
+        log("Watching…");
+
+    }
 
 };

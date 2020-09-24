@@ -28,7 +28,7 @@ module.exports = async function (fileNames, options) {
                 processedFile = new CleanCSS(options.minifyOptions).minify(processedFile).styles;
             }
     
-            mkdirp.sync(path.dirname(dest));
+            await mkdirp(path.dirname(dest));
             await writeFile(dest, processedFile);
 
             log(`Wrote ${dest} from ${src}`);

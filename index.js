@@ -7,17 +7,17 @@ module.exports = (__, options = {}) => {
         let firstRun = true;
         let isWatch = false;
 
-        monkeypatch(Eleventy, function watch (original) {
+        monkeypatch(Eleventy, async function watch (original) {
             isWatch = true;
-            return original.apply(this, arguments);
+            return await original.apply(this, arguments);
         });
 
-        monkeypatch(Eleventy, function write (original) {
+        monkeypatch(Eleventy, async function write (original) {
             if (firstRun && !this.isDryRun) {
-                processor.call(this, options, isWatch);
+                await processor.call(this, options, isWatch);
             }
             firstRun = false;
-            return original.apply(this, arguments);
+            return await original.apply(this, arguments);
         });
 
     });
