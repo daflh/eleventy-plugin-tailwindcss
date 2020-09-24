@@ -11,5 +11,9 @@ module.exports = {
                 "tiny": "0.5rem"
             }
         }
+    },
+    future: {
+        purgeLayersByDefault: true,
+        removeDeprecatedGapUtilities: true
     }
 }
