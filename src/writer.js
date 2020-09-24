@@ -6,7 +6,7 @@ const postcss = require("postcss");
 const tailwindcss = require("tailwindcss");
 const autoprefixer = require("autoprefixer");
 const CleanCSS = require("clean-css");
-const log = require("./log");
+const { log } = require("./utils");
 
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
@@ -35,6 +35,6 @@ module.exports = async function (fileNames, options) {
         }
 
     } catch (error) {
-        console.log(error);
+        log(error, true);
     }
 }

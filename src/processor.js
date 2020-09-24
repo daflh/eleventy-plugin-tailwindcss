@@ -3,7 +3,7 @@ const path = require('path');
 const chokidar = require("chokidar");
 const fg = require("fast-glob");
 const writer = require("./writer");
-const log = require("./log");
+const { log } = require("./utils");
 
 module.exports = function (options, isWatch) {
     const elev = this;
@@ -67,7 +67,7 @@ module.exports = function (options, isWatch) {
                 log("File changed: " + path);
                 writer(fileNames, options).then(() => {
                     elev.eleventyServe.reload();
-                    console.log("Watching…");
+                    log("Watching…");
                 });
             });
         }

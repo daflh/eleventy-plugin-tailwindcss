@@ -1,14 +1,5 @@
 const processor = require("./src/processor");
-
-function monkeypatch(cls, fn) {
-    const orig = cls.prototype[fn.name].__original || cls.prototype[fn.name];
-    function wrapped() {
-        return fn.bind(this, orig).apply(this, arguments);
-    }
-    wrapped.__original = orig;
-  
-    cls.prototype[fn.name] = wrapped;
-}
+const { monkeypatch } = require("./src/utils");
 
 module.exports = (__, options = {}) => {
     setImmediate(function () {
