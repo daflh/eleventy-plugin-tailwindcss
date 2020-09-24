@@ -13,8 +13,7 @@ module.exports = async function (options, isWatch) {
         src: path.join(inputDir, "**/*.css"),
         dest: ".",
         configFile: "tailwind.config.js",
-        watchEleventyFile: false,
-        excludeNodeModules: true,
+        watchEleventyWatchTargets: false,
         keepFolderStructure: true,
         autoprefixer: true,
         autoprefixerOptions: {},
@@ -30,10 +29,7 @@ module.exports = async function (options, isWatch) {
         log("Using " + options.configFile + " as configuration file");
     }
 
-    let excludeGlob = [options.dest, "**/!(*.css)"];
-    if (options.excludeNodeModules) {
-        excludeGlob.push("node_modules/**/*");
-    }
+    let excludeGlob = [options.dest, "**/!(*.css)", "node_modules/**/*"];
 
     let watchList = await fg(options.src, {
         ignore: excludeGlob
@@ -56,7 +52,7 @@ module.exports = async function (options, isWatch) {
     
     if (isWatch) {
         let ignores = [];
-        if (options.watchEleventyFile) {
+        if (options.watchEleventyWatchTargets) {
             await this.initWatch();
             watchList = watchList.concat(await this.getWatchedFiles());
             ignores = ignores.concat(this.eleventyFiles.getGlobWatcherIgnores());

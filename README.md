@@ -56,19 +56,12 @@ Take a look at second example above, if you delete `dest` option, so that it ret
 
 Path to tailwind configuration file (if exists), relative to the root of your project.
 
-### watchEleventyFile
+### watchEleventyWatchTargets
 > New in v0.2.5
 * Type: `boolean`
 * Default: `false`
 
 In watch/serve mode with this option set to `false` (default), CSS will only rebuild when files in `src` option changes. However, if set to `true`, CSS will also rebuild when the files Eleventy watches changes, that includes your template files like `.html`, `.njk`, `.md`, etc. Useful when you want to use Tailwind's purge feature during development.
-
-### excludeNodeModules
-> New in v0.2.0
-* Type: `boolean`
-* Default: `true`
-
-Should the `node_modules` folder be excluded from the matching glob.
 
 ### keepFolderStructure
 > New in v0.2.0
