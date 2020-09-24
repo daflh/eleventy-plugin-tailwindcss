@@ -11,11 +11,11 @@ module.exports = async function (options, isWatch) {
     const outputDir = elev.outputDir;
     const defaultOptions = {
         src: path.join(inputDir, "**/*.css"),
+        dest: ".",
+        configFile: "tailwind.config.js",
         watchEleventyFile: false,
         excludeNodeModules: true,
-        dest: ".",
         keepFolderStructure: true,
-        configFile: "tailwind.config.js",
         autoprefixer: true,
         autoprefixerOptions: {},
         minify: true,

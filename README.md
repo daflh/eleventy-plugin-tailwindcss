@@ -41,13 +41,6 @@ Paths (or glob patterns) to CSS files you want to process with Tailwind CSS, rel
 
 > :book: We use [fast-glob](https://www.npmjs.com/package/fast-glob) as our low-level library for glob matching.
 
-### excludeNodeModules
-> New in v0.2.0
-* Type: `boolean`
-* Default: `true`
-
-Should the `node_modules` folder be excluded from the matching glob.
-
 ### dest
 > New in v0.2.0
 * Type: `string`
@@ -57,6 +50,26 @@ Where processed CSS files should be placed in the output folder.
 
 Take a look at second example above, if you delete `dest` option, so that it returns to the default value (`.` which means right below the output folder), then the file will be placed at `_site/main.css` (Assuming your Eleventy output folder is `_site`).
 
+### configFile
+* Type: `string`
+* Default: `tailwind.config.js`
+
+Path to tailwind configuration file (if exists), relative to the root of your project.
+
+### watchEleventyFile
+> New in v0.2.5
+* Type: `boolean`
+* Default: `false`
+
+In watch/serve mode with this option set to `false` (default), CSS will only rebuild when files in `src` option changes. However, if set to `true`, CSS will also rebuild when the files Eleventy watches changes, that includes your template files like `.html`, `.njk`, `.md`, etc. Useful when you want to use Tailwind's purge feature during development.
+
+### excludeNodeModules
+> New in v0.2.0
+* Type: `boolean`
+* Default: `true`
+
+Should the `node_modules` folder be excluded from the matching glob.
+
 ### keepFolderStructure
 > New in v0.2.0
 * Type: `boolean`
@@ -65,12 +78,6 @@ Take a look at second example above, if you delete `dest` option, so that it ret
 Indicates whether the input file folder structure will be preserved in the output.
 
 Back to the second example again, if you set `keepFolderStructure` option to `true`, then the file will be placed at `_site/assets/css/main.css` (Assuming your Eleventy output folder is `_site`).
-
-### configFile
-* Type: `string`
-* Default: `tailwind.config.js`
-
-Path to tailwind configuration file (if exists), relative to the root of your project.
 
 ### autoprefixer
 * Type: `boolean`
