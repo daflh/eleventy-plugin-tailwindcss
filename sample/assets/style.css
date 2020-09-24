@@ -1,3 +1,5 @@
+@tailwind utilities;
+
 .example {
     @apply text-red-700;
     text-align: center;

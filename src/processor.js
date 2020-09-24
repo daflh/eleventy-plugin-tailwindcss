@@ -11,6 +11,7 @@ module.exports = function (options, isWatch) {
     const outputDir = elev.outputDir;
     const defaultOptions = {
         src: path.join(inputDir, "**/*.css"),
+        watchEleventyFile: false,
         excludeNodeModules: true,
         dest: ".",
         keepFolderStructure: true,
@@ -34,7 +35,7 @@ module.exports = function (options, isWatch) {
         excludeGlob.push("node_modules/**/*");
     }
 
-    const watchList = fg.sync(options.src, {
+    let watchList = fg.sync(options.src, {
         ignore: excludeGlob
     });
     
@@ -51,9 +52,17 @@ module.exports = function (options, isWatch) {
         return [src, dest];
     });
 
-    writer(fileNames, options).then(() => {
+    writer(fileNames, options).then(async () => {
         if (isWatch) {
-            const watcher = chokidar.watch(watchList);
+            let ignores = [];
+            if (options.watchEleventyFile) {
+                await this.initWatch();
+                watchList = watchList.concat(await this.getWatchedFiles());
+                ignores = ignores.concat(this.eleventyFiles.getGlobWatcherIgnores());
+            }
+            const watcher = chokidar.watch(watchList, {
+                ignored: ignores
+            });
             watcher.on("change", (path) => {
                 log("File changed: " + path);
                 writer(fileNames, options).then(() => {

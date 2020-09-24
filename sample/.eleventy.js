@@ -6,6 +6,7 @@ module.exports = (eleventyConfig) => {
 
     eleventyConfig.addPlugin(pluginTailwind, {
         src: ["**/*"],
+        watchEleventyFile: true,
         excludeNodeModules: true,
         dest: ".",
         keepFolderStructure: false,
