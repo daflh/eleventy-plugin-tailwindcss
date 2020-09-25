@@ -1,4 +1,7 @@
 # Eleventy Plugin Tailwind CSS
+
+[![npm version](https://badge.fury.io/js/eleventy-plugin-tailwindcss.svg)](https://www.npmjs.com/package/eleventy-plugin-tailwindcss)
+
 An [Eleventy](https://www.11ty.dev/) plugin to add [Tailwind CSS](https://tailwindcss.com/) support for your website.
 
 ## Installation
