@@ -23,7 +23,8 @@
   "license": "MIT",
   "scripts": {
     "sample": "rimraf sample/_site && npx @11ty/eleventy --input=sample --output=sample/_site --config=sample/.eleventy.js",
-    "sample-watch": "rimraf sample/_site && npx @11ty/eleventy --input=sample --output=sample/_site --config=sample/.eleventy.js --watch"
+    "sample-watch": "rimraf sample/_site && npx @11ty/eleventy --input=sample --output=sample/_site --config=sample/.eleventy.js --watch",
+    "lint": "eslint --fix . --ext .js"
   },
   "peerDependencies": {
     "@11ty/eleventy": ">=0.5.4"
@@ -39,6 +40,21 @@
   },
   "devDependencies": {
     "@11ty/eleventy": "^0.11.0",
+    "eslint": "^7.10.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.1",
+    "husky": "^4.3.0",
+    "lint-staged": "^10.4.0",
     "rimraf": "^3.0.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js}": [
+      "eslint --fix"
+    ]
   }
 }
