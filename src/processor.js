@@ -10,7 +10,7 @@ module.exports = async function (options, isWatch) {
     const inputDir = elev.inputDir;
     const outputDir = elev.outputDir;
     const defaultOptions = {
-        src: path.join(inputDir, "**/*.css"),
+        src: path.posix.join(inputDir, "**/*.css"),
         dest: ".",
         configFile: "tailwind.config.js",
         watchEleventyWatchTargets: false,
