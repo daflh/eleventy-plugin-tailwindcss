@@ -23,6 +23,7 @@ module.exports = async function (options, isWatch) {
 
   options = { ...defaultOptions, ...options, inputDir, outputDir };
   options.dest = path.join(outputDir, options.dest);
+
   if (!fs.existsSync(options.configFile)) {
     options.configFile = undefined;
   } else {

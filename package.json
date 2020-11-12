@@ -23,7 +23,7 @@
   "license": "MIT",
   "scripts": {
     "sample": "rimraf sample/_site && npx @11ty/eleventy --input=sample --output=sample/_site --config=sample/.eleventy.js",
-    "sample-watch": "rimraf sample/_site && npx @11ty/eleventy --input=sample --output=sample/_site --config=sample/.eleventy.js --watch",
+    "sample:serve": "rimraf sample/_site && npx @11ty/eleventy --input=sample --output=sample/_site --config=sample/.eleventy.js --serve",
     "lint": "eslint .",
     "lint:fix": "eslint --fix ."
   },
@@ -31,19 +31,19 @@
     "@11ty/eleventy": ">=0.5.4"
   },
   "dependencies": {
-    "autoprefixer": "^10.0.0",
-    "chokidar": "^3.4.2",
+    "autoprefixer": "^10.0.2",
+    "chokidar": "^3.4.3",
     "clean-css": "^4.2.3",
     "fast-glob": "^3.2.4",
     "mkdirp": "^1.0.4",
-    "postcss": "^8.0.9",
-    "tailwindcss": "^1.8.10"
+    "postcss": "^8.1.7",
+    "tailwindcss": "^1.9.6"
   },
   "devDependencies": {
-    "@11ty/eleventy": "^0.11.0",
-    "eslint": "^7.10.0",
+    "@11ty/eleventy": "^0.11.1",
+    "eslint": "^7.13.0",
     "husky": "^4.3.0",
-    "lint-staged": "^10.4.0",
+    "lint-staged": "^10.5.1",
     "rimraf": "^3.0.2"
   },
   "husky": {
@@ -52,6 +52,8 @@
     }
   },
   "lint-staged": {
-    "*.js": ["npm run lint:fix"]
+    "*.js": [
+      "npm run lint:fix"
+    ]
   }
 }

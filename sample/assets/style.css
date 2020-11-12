@@ -6,7 +6,3 @@
     transition: all .5s;
     user-select: none;
 }
-
-.tiny {
-    @apply text-tiny;
-}
