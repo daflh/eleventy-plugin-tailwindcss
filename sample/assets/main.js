@@ -1,3 +1,3 @@
 setTimeout(() => {
-    document.getElementById("ex").classList.remove("tiny");
+  document.getElementById('ex').classList.remove('tiny');
 }, 500);

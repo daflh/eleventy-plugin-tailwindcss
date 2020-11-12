@@ -1,9 +1,8 @@
 const pluginTailwind = require("../index");
 
 module.exports = (eleventyConfig) => {
-
     eleventyConfig.addPassthroughCopy({ "sample/assets/*.js": "." });
-
+    
     eleventyConfig.addPlugin(pluginTailwind, {
         src: ["**/*"],
         dest: ".",
@@ -15,5 +14,4 @@ module.exports = (eleventyConfig) => {
         minify: true,
         minifyOptions: {}
     });
-
 }
