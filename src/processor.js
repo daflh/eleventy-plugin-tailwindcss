@@ -5,7 +5,7 @@ const fg = require('fast-glob');
 const writer = require('./writer');
 const { log } = require('./utils');
 
-module.exports = async function(options, isWatch) {
+module.exports = async function(userOptions, isWatch) {
   const elev = this;
   const inputDir = elev.inputDir;
   const outputDir = elev.outputDir;
@@ -21,13 +21,24 @@ module.exports = async function(options, isWatch) {
     minifyOptions: {}
   };
 
-  options = { ...defaultOptions, ...options, inputDir, outputDir };
+  const options = {
+    ...defaultOptions,
+    ...userOptions,
+    inputDir,
+    outputDir
+  };
+
   options.dest = path.join(outputDir, options.dest);
 
   if (!fs.existsSync(options.configFile)) {
     options.configFile = null;
+
+    if ('configFile' in userOptions) {
+      log('Tailwind config file not found at ' + userOptions.configFile, true);
+      return;
+    }
   } else {
-    log('Using ' + options.configFile + ' as configuration file');
+    log('Using ' + options.configFile + ' as Tailwind config file');
   }
 
   let watchList = await fg(options.src, {
