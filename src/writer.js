@@ -11,15 +11,15 @@ const { log } = require('./utils');
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
 
-module.exports = async function (fileNames, options) {
+module.exports = async function(fileNames, options) {
   try {
     const postcssPlugins = [
       tailwindcss(options.configFile),
       ...options.autoprefixer ? [autoprefixer(options.autoprefixerOptions)] : []
     ];
 
-    for (let [src, dest] of fileNames) {
-      let rawFile = await readFile(src);
+    for (const [src, dest] of fileNames) {
+      const rawFile = await readFile(src);
       let { css: processedFile } = await postcss(postcssPlugins).process(rawFile, {
         from: src,
         to: dest

@@ -3,31 +3,21 @@ module.exports = {
     browser: true,
     node: true,
     commonjs: true,
-    es2021: true,
+    es2021: true
   },
-  extends: 'eslint:recommended',
+  extends: [
+    'eslint:recommended',
+    'google'
+  ],
   parserOptions: {
-    ecmaVersion: 12,
+    ecmaVersion: 12
   },
   rules: {
-    indent: ['error', 2, {
-      'SwitchCase': 1
-    }],
-    'linebreak-style': ['error', 'unix'],
-    quotes: ['error', 'single'],
-    semi: ['error', 'always'],
-    'brace-style': ['error', '1tbs', {
-      'allowSingleLine': true
-    }],
-    'no-var': 'error',
-    'no-multi-spaces': 'error',
-    'no-trailing-spaces': 'error',
-    'array-bracket-spacing': ['error', 'never'],
+    'max-len': 'off',
+    'require-jsdoc': 'off',
     'object-curly-spacing': ['error', 'always'],
-    'space-before-function-paren': ['error', {
-      anonymous: 'always',
-      named: 'never',
-      asyncArrow: 'always'
-    }]
-  },
+    'quote-props': ['error', 'as-needed'],
+    'comma-dangle': ['error', 'never'],
+    'prefer-rest-params': 'off'
+  }
 };

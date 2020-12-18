@@ -5,7 +5,7 @@ const fg = require('fast-glob');
 const writer = require('./writer');
 const { log } = require('./utils');
 
-module.exports = async function (options, isWatch) {
+module.exports = async function(options, isWatch) {
   const elev = this;
   const inputDir = elev.inputDir;
   const outputDir = elev.outputDir;
@@ -30,20 +30,24 @@ module.exports = async function (options, isWatch) {
     log('Using ' + options.configFile + ' as configuration file');
   }
 
-  let excludeGlob = [options.dest, '**/!(*.css)', 'node_modules/**/*'];
+  const excludeGlob = [options.dest, '**/!(*.css)', 'node_modules/**/*'];
   let watchList = await fg(options.src, {
     ignore: excludeGlob
   });
   const fileNames = watchList.map((src) => {
-    let baseName = path.basename(src);
+    const baseName = path.basename(src);
     let subDir = '';
+
     if (options.keepFolderStructure) {
-      let pathToFile = path.relative(options.inputDir, path.dirname(src));
+      const pathToFile = path.relative(options.inputDir, path.dirname(src));
+
       if (pathToFile !== '') {
         subDir = pathToFile.replace(/^\.\.\/?/, '');
       }
     }
-    let dest = path.join(options.dest, subDir, baseName);
+
+    const dest = path.join(options.dest, subDir, baseName);
+
     return [src, dest];
   });
 
@@ -54,6 +58,7 @@ module.exports = async function (options, isWatch) {
 
     if (options.watchEleventyWatchTargets) {
       await this.initWatch();
+
       watchList = watchList.concat(await this.getWatchedFiles());
       ignores = ignores.concat(this.eleventyFiles.getGlobWatcherIgnores());
     }
@@ -67,11 +72,11 @@ module.exports = async function (options, isWatch) {
 
       writer(fileNames, options).then(() => {
         elev.eleventyServe.reload();
+
         log('Watching…');
       });
     });
 
     log('Watching…');
   }
-
 };

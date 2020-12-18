@@ -11,7 +11,9 @@ function monkeypatch(cls, fn) {
 }
 
 function log(msg, isError) {
-  if (isError) msg = '\u001b[31mError!\u001b[39m ' + msg;
+  if (isError) {
+    msg = '\u001b[31mError!\u001b[39m ' + msg;
+  }
 
   const pluginName = 'Eleventy-Plugin-TailwindCSS';
 

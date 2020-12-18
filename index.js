@@ -2,13 +2,14 @@ const processor = require('./src/processor');
 const { monkeypatch } = require('./src/utils');
 
 module.exports = (_, options = {}) => {
-  setImmediate(function () {
+  setImmediate(function() {
     const Eleventy = require('@11ty/eleventy');
     let firstRun = true;
     let isWatch = false;
 
     monkeypatch(Eleventy, async function watch(original) {
       isWatch = true;
+
       return await original.apply(this, arguments);
     });
 
@@ -18,8 +19,8 @@ module.exports = (_, options = {}) => {
       }
 
       firstRun = false;
+
       return await original.apply(this, arguments);
     });
-
   });
 };
