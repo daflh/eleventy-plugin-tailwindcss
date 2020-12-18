@@ -5,8 +5,11 @@ module.exports = {
       'sample/index.html'
     ]
   },
-  future: {
-    purgeLayersByDefault: true,
-    removeDeprecatedGapUtilities: true
+  theme: {
+    extend: {
+      colors: {
+        test: 'maroon'
+      }
+    }
   }
 };

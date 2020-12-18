@@ -14,7 +14,7 @@ const writeFile = util.promisify(fs.writeFile);
 module.exports = async function(fileNames, options) {
   try {
     const postcssPlugins = [
-      tailwindcss(options.configFile),
+      ...options.configFile ? [tailwindcss(options.configFile)] : [tailwindcss()],
       ...options.autoprefixer ? [autoprefixer(options.autoprefixerOptions)] : []
     ];
 

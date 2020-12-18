@@ -25,14 +25,13 @@ module.exports = async function(options, isWatch) {
   options.dest = path.join(outputDir, options.dest);
 
   if (!fs.existsSync(options.configFile)) {
-    options.configFile = undefined;
+    options.configFile = null;
   } else {
     log('Using ' + options.configFile + ' as configuration file');
   }
 
-  const excludeGlob = [options.dest, '**/!(*.css)', 'node_modules/**/*'];
   let watchList = await fg(options.src, {
-    ignore: excludeGlob
+    ignore: [options.dest, 'node_modules/**/*', '**/!(*.css)']
   });
   const fileNames = watchList.map((src) => {
     const baseName = path.basename(src);
@@ -61,6 +60,10 @@ module.exports = async function(options, isWatch) {
 
       watchList = watchList.concat(await this.getWatchedFiles());
       ignores = ignores.concat(this.eleventyFiles.getGlobWatcherIgnores());
+    }
+
+    if (options.configFile) {
+      watchList.push(options.configFile);
     }
 
     const watcher = chokidar.watch(watchList, {

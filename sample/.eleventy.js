@@ -7,7 +7,7 @@ module.exports = (eleventyConfig) => {
         src: ["**/*"],
         dest: ".",
         configFile: "sample/tailwind.config.js",
-        watchEleventyWatchTargets: true,
+        watchEleventyWatchTargets: false,
         keepFolderStructure: false,
         autoprefixer: true,
         autoprefixerOptions: {},
