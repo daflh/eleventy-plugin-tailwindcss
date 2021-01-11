@@ -1,4 +1,4 @@
-const pluginTailwind = require("../index");
+const pluginTailwind = require("../");
 
 module.exports = (eleventyConfig) => {
     eleventyConfig.addPassthroughCopy({ "sample/assets/*.js": "." });

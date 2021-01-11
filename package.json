@@ -2,7 +2,7 @@
   "name": "eleventy-plugin-tailwindcss",
   "version": "0.3.0",
   "description": "An Eleventy plugin to add Tailwind CSS support for your website",
-  "main": "index.js",
+  "main": "src/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dafiulh/eleventy-plugin-tailwindcss.git"
@@ -28,8 +28,7 @@
     "lint:fix": "eslint --fix ."
   },
   "files": [
-    "src/",
-    "index.js"
+    "src/"
   ],
   "peerDependencies": {
     "@11ty/eleventy": ">=0.5.4"

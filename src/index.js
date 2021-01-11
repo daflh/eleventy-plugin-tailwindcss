@@ -1,5 +1,5 @@
-const processor = require('./src/processor');
-const { monkeypatch } = require('./src/utils');
+const processor = require('./processor');
+const { monkeypatch } = require('./utils');
 
 module.exports = (_, options = {}) => {
   setImmediate(function() {
