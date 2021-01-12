@@ -18,7 +18,9 @@ module.exports = async function(userOptions, isWatch) {
     autoprefixer: true,
     autoprefixerOptions: {},
     minify: true,
-    minifyOptions: {}
+    minifyOptions: {},
+    excludeNodeModules: true,
+    excludeNonCssFiles: true
   };
 
   const options = {
@@ -42,7 +44,11 @@ module.exports = async function(userOptions, isWatch) {
   }
 
   let watchList = await fg(options.src, {
-    ignore: [options.dest, 'node_modules/**/*', '**/!(*.css)']
+    ignore: [
+      options.dest,
+      ...options.excludeNodeModules ? ['node_modules/**/*'] : [],
+      ...options.excludeNonCssFiles ? ['**/!(*.css)'] : []
+    ]
   });
   const fileNames = watchList.map((src) => {
     const baseName = path.basename(src);
