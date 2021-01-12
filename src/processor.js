@@ -43,60 +43,49 @@ module.exports = async function(userOptions, isWatch) {
     log('Using ' + options.configFile + ' as Tailwind config file');
   }
 
-  let watchList = await fg(options.src, {
+  const filePaths = await fg(options.src, {
     ignore: [
       options.dest,
       ...options.excludeNodeModules ? ['node_modules/**/*'] : [],
       ...options.excludeNonCssFiles ? ['**/!(*.css)'] : []
     ]
   });
-  const fileNames = watchList.map((src) => {
-    const baseName = path.basename(src);
-    let subDir = '';
 
-    if (options.keepFolderStructure) {
-      const pathToFile = path.relative(options.inputDir, path.dirname(src));
+  if (filePaths.length > 0) {
+    await writer(filePaths, options);
 
-      if (pathToFile !== '') {
-        subDir = pathToFile.replace(/^\.\.\/?/, '');
+    if (isWatch) {
+      let watchFilePaths = filePaths.slice();
+      let ignores = [];
+
+      if (options.watchEleventyWatchTargets) {
+        await elev.initWatch();
+
+        watchFilePaths = watchFilePaths.concat(await elev.getWatchedFiles());
+        ignores = ignores.concat(elev.eleventyFiles.getGlobWatcherIgnores());
       }
-    }
 
-    const dest = path.join(options.dest, subDir, baseName);
+      if (options.configFile) {
+        watchFilePaths.push(options.configFile);
+      }
 
-    return [src, dest];
-  });
-
-  await writer(fileNames, options);
-
-  if (isWatch) {
-    let ignores = [];
-
-    if (options.watchEleventyWatchTargets) {
-      await this.initWatch();
-
-      watchList = watchList.concat(await this.getWatchedFiles());
-      ignores = ignores.concat(this.eleventyFiles.getGlobWatcherIgnores());
-    }
-
-    if (options.configFile) {
-      watchList.push(options.configFile);
-    }
-
-    const watcher = chokidar.watch(watchList, {
-      ignored: ignores
-    });
-
-    watcher.on('change', (path) => {
-      log('File changed: ' + path);
-
-      writer(fileNames, options).then(() => {
-        elev.eleventyServe.reload();
-
-        log('Watching…');
+      const watcher = chokidar.watch(watchFilePaths, {
+        ignored: ignores
       });
-    });
 
-    log('Watching…');
+      watcher.on('change', (filePath) => {
+        log('File changed: ' + filePath);
+
+        writer(filePaths, options).then(() => {
+          elev.eleventyServe.reload();
+
+          log('Watching…');
+        });
+      });
+
+      log('Watching…');
+    }
+  } else {
+    log('No files matching the src option were found');
   }
 };

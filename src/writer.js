@@ -11,26 +11,41 @@ const { log } = require('./utils');
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
 
-module.exports = async function(fileNames, options) {
+module.exports = async function(filePaths, options) {
   try {
     const postcssPlugins = [
       ...options.configFile ? [tailwindcss(options.configFile)] : [tailwindcss()],
       ...options.autoprefixer ? [autoprefixer(options.autoprefixerOptions)] : []
     ];
+    const getDest = (src) => {
+      const baseName = path.basename(src);
+      let subDir = '';
 
-    for (const [src, dest] of fileNames) {
-      const rawFile = await readFile(src);
-      let { css: processedFile } = await postcss(postcssPlugins).process(rawFile, {
+      if (options.keepFolderStructure) {
+        const pathToFile = path.relative(options.inputDir, path.dirname(src));
+
+        if (pathToFile !== '') {
+          subDir = pathToFile.replace(/^\.\.\/?/, '');
+        }
+      }
+
+      return path.join(options.dest, subDir, baseName);
+    };
+
+    for (const src of filePaths) {
+      const dest = getDest(src);
+      let content = await readFile(src);
+      content = (await postcss(postcssPlugins).process(content, {
         from: src,
         to: dest
-      });
+      })).css;
 
       if (options.minify) {
-        processedFile = new CleanCSS(options.minifyOptions).minify(processedFile).styles;
+        content = new CleanCSS(options.minifyOptions).minify(content).styles;
       }
 
       await mkdirp(path.dirname(dest));
-      await writeFile(dest, processedFile);
+      await writeFile(dest, content);
 
       log(`Wrote ${dest} from ${src}`);
     }
