@@ -1,3 +1,11 @@
+<table>
+  <td>:warning: <b>This plugin has been deprecated and will no longer be updated</b></td>
+</table>
+
+I initially created this plugin to simplify using TailwindCSS alongside Eleventy. At that time, there were no `eleventy.before` and `eleventy.after` events in Eleventy's official API yet, so we had to _monkeypatch_ the Eleventy code so that the TailwindCSS compiler automatically runs whenever Eleventy tries to rebuild the site. This technique is definitely a bad idea because of [these reasons](https://en.wikipedia.org/wiki/Monkey_patch#Pitfalls) (too lazy to explain it here lol). Now, with the release of Eleventy v1.0.0 and also TailwindCSS v2.1 which includes the new Just-in-Time (JIT) mode that makes things much faster and more efficient, this plugin is effectively obsolete and I'm no longer recommending anyone to use it. You can find tons of tutorials on the internet showing how to integrate TailwindCSS with Eleventy like [this one](https://daily-dev-tips.com/posts/adding-tailwind-to-eleventy/) or check out my starter project [here](https://github.com/daflh/vredeburg) for reference.
+
+---
+
 # Eleventy Plugin Tailwind CSS
 
 [![npm version](https://badge.fury.io/js/eleventy-plugin-tailwindcss.svg)](https://www.npmjs.com/package/eleventy-plugin-tailwindcss)
